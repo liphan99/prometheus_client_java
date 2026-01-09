@@ -121,7 +121,7 @@ for [Histogram.Builder](/client_java/api/io/prometheus/metrics/core/metrics/Hist
 for a complete list of options. Some options can be configured at runtime,
 see [config]({{< relref "../config/config.md" >}}).
 
-Histograms and summaries are both used for observing distributions. Therefore, the both implement
+Histograms and summaries are both used for observing distributions. Therefore, they both implement
 the `DistributionDataPoint` interface. Using the `DistributionDataPoint` interface directly gives
 you the option to switch between histograms and summaries later with minimal code changes.
 
