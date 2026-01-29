@@ -4,7 +4,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-import io.prometheus.metrics.expositionformats.generated.com_google_protobuf_4_33_2.Metrics;
+import io.prometheus.metrics.expositionformats.generated.com_google_protobuf_4_33_4.Metrics;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,8 +33,12 @@ public abstract class ExporterTest {
     this.sampleAppVolume =
         Volume.create("it-exporter")
             .copy("../../it-" + sampleApp + "/target/" + sampleApp + ".jar");
+    String javaVersion = System.getenv("TEST_JAVA_VERSION");
+    if (javaVersion == null || javaVersion.isEmpty()) {
+      javaVersion = "25";
+    }
     this.sampleAppContainer =
-        new GenericContainer<>("eclipse-temurin:25")
+        new GenericContainer<>("eclipse-temurin:" + javaVersion)
             .withFileSystemBind(sampleAppVolume.getHostPath(), "/app", BindMode.READ_ONLY)
             .withWorkingDirectory("/app")
             .withLogConsumer(LogConsumer.withPrefix(sampleApp))
@@ -53,7 +57,7 @@ public abstract class ExporterTest {
   }
 
   @AfterEach
-  public void tearDown() throws IOException {
+  void tearDown() throws IOException {
     sampleAppContainer.stop();
     sampleAppVolume.remove();
   }
